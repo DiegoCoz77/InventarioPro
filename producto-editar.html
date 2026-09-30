@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Editar Producto | InventarioPro</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>body{background:#f4f6fa}.card{border-radius:.75rem}</style></head><body>
+<nav class="navbar navbar-dark bg-primary mb-3"><div class="container"><a class="navbar-brand" href="panel.html">InventarioPro</a>
+<span class="text-white small" id="usuario"></span></div></nav><div class="container py-3">
+<nav><ol class="breadcrumb"><li class="breadcrumb-item"><a href="panel.html">Panel de Control</a></li><li class="breadcrumb-item"><a href="productos.html">Productos</a></li><li class="breadcrumb-item active">Editar Producto</li></ol></nav>
+<div id="alerta"></div><div class="card shadow-sm"><div class="card-body p-4"><h3>Modificar Producto <span class="badge bg-warning text-dark" id="etq"></span></h3>
+<form id="f" class="mt-3" novalidate><div class="row g-3">
+<div class="col-md-6"><label class="form-label">Nombre del Producto</label><input name="nombre" id="nombre" class="form-control" required minlength="3"></div>
+<div class="col-md-6"><label class="form-label">Código SKU</label><input id="sku" class="form-control" disabled></div>
+<div class="col-md-6"><label class="form-label">Categoría</label><select name="categorias" id="cat" class="form-select" required><option>Periféricos</option><option>Soporte Técnico</option><option>Facturación</option><option>Ventas</option><option>Reclamos</option></select></div>
+<div class="col-md-6"><label class="form-label">Etiqueta Visual</label><input type="color" name="etiqueta" id="etiqueta" class="form-control form-control-color w-100"></div>
+<div class="col-12"><label class="form-label d-block">Disponibilidad</label><div class="btn-group"><input type="radio" class="btn-check" name="estado" id="e0" value="En Stock"><label class="btn btn-outline-primary" for="e0">En Stock</label><input type="radio" class="btn-check" name="estado" id="e1" value="Agotado"><label class="btn btn-outline-primary" for="e1">Agotado</label><input type="radio" class="btn-check" name="estado" id="e2" value="Descontinuado"><label class="btn btn-outline-primary" for="e2">Descontinuado</label></div></div>
+<div class="col-12"><button class="btn btn-warning">Actualizar Cambios</button> <a href="productos.html" class="btn btn-outline-primary">Cancelar</a></div></div></form></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="app.js"></script>
+<script>exigirSesion();
+const lista = leer('productos'), p = lista.find(x => x.sku === param('sku'));
+if (!p) location.href = 'productos.html';
+etq.textContent = 'SKU: ' + p.sku; sku.value = p.sku; nombre.value = p.nombre; cat.value = p.categorias; etiqueta.value = p.etiqueta;
+document.querySelector('[name=estado][value="' + p.estado + '"]').checked = true;
+enviar('f', d => {
+  if (!confirm('¿Actualizar los cambios?')) return;
+  Object.assign(p, { nombre: d.nombre.trim(), categorias: d.categorias, etiqueta: d.etiqueta, estado: d.estado });
+  guardar('productos', lista); location.href = 'productos.html?m=' + encodeURIComponent('Producto actualizado correctamente');
+});
+</script></body></html>

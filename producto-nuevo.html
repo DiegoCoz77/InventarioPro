@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nuevo Producto | InventarioPro</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>body{background:#f4f6fa}.card{border-radius:.75rem}</style></head><body>
+<nav class="navbar navbar-dark bg-primary mb-3"><div class="container"><a class="navbar-brand" href="panel.html">InventarioPro</a>
+<span class="text-white small" id="usuario"></span></div></nav><div class="container py-3">
+<nav><ol class="breadcrumb"><li class="breadcrumb-item"><a href="panel.html">Panel de Control</a></li><li class="breadcrumb-item active">Registro de Producto</li></ol></nav>
+<div id="alerta"></div><div class="card shadow-sm"><div class="card-body p-4"><div class="d-flex justify-content-between mb-3"><h3>Nuevo Producto <span class="badge bg-secondary fs-6">Inventario</span></h3>
+<a href="panel.html" class="btn btn-outline-secondary align-self-start">Volver al Panel</a></div>
+<form id="f" novalidate><div class="row g-3">
+<div class="col-md-6"><label class="form-label">Nombre del Producto</label><input name="nombre" class="form-control" placeholder="Ej. Teclado Mecánico RGB" required minlength="3"></div>
+<div class="col-md-6"><label class="form-label">Código SKU</label><input name="sku" class="form-control" placeholder="PROD-001" required pattern="[A-Za-z0-9\-]{3,20}"></div>
+<div class="col-md-6"><label class="form-label">Categorías Asignadas</label><select name="categorias" id="cat" class="form-select" multiple size="4" required>
+<option>Soporte Técnico</option><option>Facturación</option><option>Ventas</option><option>Reclamos</option><option>Periféricos</option></select></div>
+<div class="col-md-6"><label class="form-label">Etiqueta Visual</label><input type="color" name="etiqueta" value="#0d6efd" class="form-control form-control-color w-100"></div>
+<div class="col-12"><label class="form-label d-block">Disponibilidad Inicial</label><div class="btn-group"><input type="radio" class="btn-check" name="estado" id="e0" value="En Stock" checked><label class="btn btn-outline-primary" for="e0">En Stock</label><input type="radio" class="btn-check" name="estado" id="e1" value="Agotado" ><label class="btn btn-outline-primary" for="e1">Agotado</label><input type="radio" class="btn-check" name="estado" id="e2" value="Descontinuado" ><label class="btn btn-outline-primary" for="e2">Descontinuado</label></div></div>
+<div class="col-12 form-check ms-2"><input class="form-check-input" type="checkbox" name="publicado" id="pub" checked><label class="form-check-label" for="pub">Publicar inmediatamente en el catálogo general</label></div>
+<div class="col-12"><button class="btn btn-primary">Guardar Producto</button> <a href="productos.html" class="btn btn-outline-danger">Cancelar</a></div></div></form></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="app.js"></script>
+<script>exigirSesion();
+enviar('f', (d, f) => {
+  const p = leer('productos'), sku = d.sku.toUpperCase();
+  if (p.some(x => x.sku === sku)) return mostrarAlerta('Ese SKU ya existe.', 'danger');
+  p.push({ sku, nombre: d.nombre.trim(), categorias: [...cat.selectedOptions].map(o => o.value).join(', '), etiqueta: d.etiqueta, estado: d.estado, publicado: !!d.publicado });
+  guardar('productos', p); location.href = 'productos.html?m=' + encodeURIComponent('Producto guardado correctamente');
+});
+</script></body></html>

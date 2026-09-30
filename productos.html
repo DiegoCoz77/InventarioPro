@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Productos | InventarioPro</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>body{background:#f4f6fa}.card{border-radius:.75rem}</style></head><body>
+<nav class="navbar navbar-dark bg-primary mb-3"><div class="container"><a class="navbar-brand" href="panel.html">InventarioPro</a>
+<span class="text-white small" id="usuario"></span></div></nav><div class="container py-3">
+<nav><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.html">Inicio</a></li><li class="breadcrumb-item"><a href="panel.html">Panel de Control</a></li><li class="breadcrumb-item active">Productos</li></ol></nav>
+<div id="alerta"></div><div class="row"><div class="col-md-3"><div class="list-group mb-3"><a href="panel.html" class="list-group-item list-group-item-action text-center ">Inicio</a><a href="productos.html" class="list-group-item list-group-item-action text-center active">Productos</a><a href="usuarios.html" class="list-group-item list-group-item-action text-center ">Usuarios</a></div></div><div class="col-md-9"><div class="card"><div class="card-body">
+<div class="d-flex justify-content-between mb-3"><h4>Catálogo de Productos</h4><a href="producto-nuevo.html" class="btn btn-primary">+ Nuevo Producto</a></div>
+<div class="table-responsive"><table class="table table-hover align-middle"><thead><tr><th>SKU</th><th>Nombre</th><th>Categoría</th><th>Estado</th><th></th></tr></thead><tbody id="tb"></tbody></table></div></div></div></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="app.js"></script>
+<script>exigirSesion();
+mostrarAlerta(param('m'), 'success');
+const lista = leer('productos');
+tb.innerHTML = lista.map(p => `<tr><td><span class="badge" style="background:${esc(p.etiqueta)}">${esc(p.sku)}</span></td><td>${esc(p.nombre)}</td><td>${esc(p.categorias)}</td>
+<td><span class="badge bg-${BADGE[p.estado]}">${p.estado}</span></td><td class="text-end"><a class="btn btn-sm btn-warning" href="producto-editar.html?sku=${encodeURIComponent(p.sku)}">Editar</a>
+<a class="btn btn-sm btn-danger" href="producto-eliminar.html?sku=${encodeURIComponent(p.sku)}">Eliminar</a></td></tr>`).join('') || '<tr><td colspan="5" class="text-center text-muted">Sin productos</td></tr>';
+</script></body></html>
